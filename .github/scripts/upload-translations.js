@@ -27,6 +27,7 @@ async function uploadTranslations() {
     // Validate JSON format
     try {
       JSON.parse(fileContent);
+      console.log(`File content: ${JSON.parse(fileContent)}`);
     } catch (error) {
       throw new Error(`Invalid JSON format in ${FILE_PATH}: ${error.message}`);
     }
