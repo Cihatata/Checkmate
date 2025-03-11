@@ -14,7 +14,7 @@ const API_URL = 'https://api.poeditor.com/v2';
 // Function to upload translations
 async function uploadTranslations() {
   try {
-    console.log(`Uploading translations for ${LANGUAGE} language from ${FILE_PATH}...`);
+    console.log(`Uploading translations for ${LANGUAGE} language from ${FILE_PATH}... test1`);
 
     // Check if file exists
     if (!await fs.pathExists(FILE_PATH)) {
@@ -27,7 +27,6 @@ async function uploadTranslations() {
     // Validate JSON format
     try {
       JSON.parse(fileContent);
-      console.log(`File content: ${JSON.stringify(fileContent, null, 2)}`);
     } catch (error) {
       throw new Error(`Invalid JSON format in ${FILE_PATH}: ${error.message}`);
     }
@@ -38,7 +37,7 @@ async function uploadTranslations() {
     formData.append('id', PROJECT_ID);
     formData.append('language', LANGUAGE);
     formData.append('updating', 'terms_translations');
-    formData.append('file', new Blob([fileContent], { type: 'application/json' }));
+    formData.append('file', fs.createReadStream(FILE_PATH));
     formData.append('overwrite', '1');
     formData.append('sync_terms', '1');
 
