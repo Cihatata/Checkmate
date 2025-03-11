@@ -27,7 +27,7 @@ async function uploadTranslations() {
     // Validate JSON format
     try {
       JSON.parse(fileContent);
-      console.log(`File content: ${JSON.parse(fileContent)}`);
+      console.log(`File content: ${JSON.stringify(fileContent, null, 2)}`);
     } catch (error) {
       throw new Error(`Invalid JSON format in ${FILE_PATH}: ${error.message}`);
     }
@@ -38,7 +38,7 @@ async function uploadTranslations() {
     formData.append('id', PROJECT_ID);
     formData.append('language', LANGUAGE);
     formData.append('updating', 'terms_translations');
-    formData.append('file', fileContent);
+    formData.append('file', new Blob([fileContent], { type: 'application/json' }));
     formData.append('overwrite', '1');
     formData.append('sync_terms', '1');
 
