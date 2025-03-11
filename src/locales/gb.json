@@ -173,6 +173,6 @@
 			"urlLabel": "Webhook URL",
 			"urlPlaceholder": "https://your-server.com/webhook"
 		},
-		"testNotificationDevelop": "Test notification 1"
+		"testNotificationDevelop": "Test notification 2"
 	}
 }
