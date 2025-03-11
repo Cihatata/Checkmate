@@ -1,6 +1,6 @@
-import axios from 'axios';
-import fs from 'fs-extra';
-import { URLSearchParams } from 'url';
+import axios from "axios";
+import FormData from "form-data";
+import fs from "fs-extra";
 
 // POEditor API information
 const API_TOKEN = process.env.POEDITOR_API;
