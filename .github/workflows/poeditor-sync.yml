@@ -12,7 +12,6 @@ on:
         description: "Export format (key_value_json or json)"
         required: false
         default: "key_value_json"
-
   # For automatic execution at a specific time (every day at midnight)
   schedule:
     - cron: "0 0 * * *"
@@ -55,11 +54,15 @@ jobs:
 
       - name: Download translations from POEditor
         env:
-          POEDITOR_API: ${{ secrets.POEDITOR_API }}
-          POEDITOR_PROJECT_ID: ${{ secrets.POEDITOR_PROJECT_ID }}
+          POEDITOR_API: ${{ vars.POEDITOR_API }}
+          POEDITOR_PROJECT_ID: ${{ vars.POEDITOR_PROJECT_ID }}
           LANGUAGES: ${{ github.event.inputs.languages || 'tr,en' }}
           EXPORT_FORMAT: ${{ github.event.inputs.format || 'key_value_json' }}
         run: |
+          echo "POEDITOR_API: ${{ vars.POEDITOR_API }}"
+          echo "POEDITOR_PROJECT_ID: ${{ vars.POEDITOR_PROJECT_ID }}"
+          echo "LANGUAGES: ${{ github.event.inputs.languages || 'tr,en' }}"
+          echo "EXPORT_FORMAT: ${{ github.event.inputs.format || 'key_value_json' }}"
           mkdir -p temp
           node .github/scripts/download-translations.js
 
