@@ -7,11 +7,22 @@ on:
       - develop
     paths:
       - "src/locales/**"
+  # Manuel tetikleme eklendi
+  workflow_dispatch:
+    inputs:
+      language:
+        description: "Yüklenecek dil dosyası (örn: tr, en, gb)"
+        required: false
+        default: "all"
+      comment:
+        description: "Tetikleme için açıklama"
+        required: false
+        default: "Manuel tetikleme"
 
 jobs:
   upload-translations:
-    # Only run if the PR was merged (not just closed)
-    if: github.event.pull_request.merged == true
+    # Only run if the PR was merged (not just closed) or manually triggered
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -48,12 +59,34 @@ jobs:
 
       - name: Get changed locale files
         id: changed-files
+        if: github.event_name == 'pull_request'
         run: |
           # Get list of changed files in src/locales directory
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} -- src/locales/*.json)
           echo "Changed files: $CHANGED_FILES"
 
           # Create a JSON array of changed files with language codes
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          echo "$CHANGED_FILES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Set files for manual trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.language }}" == "all" ]; then
+            echo "Uploading all language files"
+            CHANGED_FILES=$(find src/locales -name "*.json" -type f)
+          else
+            echo "Uploading language file: ${{ github.event.inputs.language }}"
+            CHANGED_FILES="src/locales/${{ github.event.inputs.language }}.json"
+            # Handle special case for gb.json
+            if [ "${{ github.event.inputs.language }}" == "en" ]; then
+              CHANGED_FILES="$CHANGED_FILES src/locales/gb.json"
+            fi
+          fi
+
+          echo "Changed files: $CHANGED_FILES"
+
           echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
           echo "$CHANGED_FILES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -88,9 +121,12 @@ jobs:
       - name: Notify on success
         if: success() && env.CHANGED_FILES != ''
         run: |
-          echo "Successfully uploaded changed translation files to POEditor."
+          echo "Successfully uploaded translation files to POEditor."
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Manual trigger comment: ${{ github.event.inputs.comment }}"
+          fi
 
       - name: Notify on no changes
         if: env.CHANGED_FILES == ''
         run: |
-          echo "No translation files were changed in this pull request."
+          echo "No translation files were found to upload."
