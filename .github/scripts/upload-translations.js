@@ -45,7 +45,6 @@ async function uploadTranslations() {
     const response = await axios.post(`${API_URL}/projects/upload`, formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        ...formData.getHeaders()
       }
     });
 
