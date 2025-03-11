@@ -32,7 +32,7 @@ async function uploadTranslations() {
     }
 
     // Create form data for upload
-    const formData = new URLSearchParams();
+    const formData = new FormData();
     formData.append('api_token', API_TOKEN);
     formData.append('id', PROJECT_ID);
     formData.append('language', LANGUAGE);
@@ -44,7 +44,8 @@ async function uploadTranslations() {
     // Upload to POEditor
     const response = await axios.post(`${API_URL}/projects/upload`, formData, {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ...formData.getHeaders()
       }
     });
 
