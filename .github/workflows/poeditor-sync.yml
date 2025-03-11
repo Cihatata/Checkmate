@@ -12,6 +12,12 @@ on:
         description: "Export format (key_value_json or json)"
         required: false
         default: "key_value_json"
+      api_token:
+        description: "POEditor API token (if not set in secrets)"
+        required: false
+      project_id:
+        description: "POEditor project ID (if not set in secrets)"
+        required: false
   # For automatic execution at a specific time (every day at midnight)
   schedule:
     - cron: "0 0 * * *"
@@ -19,6 +25,9 @@ on:
 jobs:
   sync-translations:
     runs-on: ubuntu-latest
+    # Explicitly request permissions
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
