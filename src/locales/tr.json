@@ -375,5 +375,8 @@
   "infrastructureMonitorUpdated": "",
   "errorInvalidTypeId": "",
   "errorInvalidFieldId": "",
-  "inviteNoTokenFound": ""
+  "inviteNoTokenFound": "",
+  "pageSpeedWarning": "",
+  "pageSpeedLearnMoreLink": "",
+  "pageSpeedAddApiKey": ""
 }
