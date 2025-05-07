@@ -410,5 +410,6 @@
     "validationFailed": "",
     "noFileSelected": "",
     "fallbackPage": ""
-  }
+  },
+  "welcomeBack": "Tekrar hoş geldiniz! Başarıyla giriş yaptınız."
 }
